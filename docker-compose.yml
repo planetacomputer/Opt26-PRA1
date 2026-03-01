@@ -1,0 +1,124 @@
+name: crdb-europe
+
+services:
+  frankfurt:
+    image: cockroachdb/cockroach:v24.3.6
+    container_name: frankfurt
+    command:
+      - start
+      - --insecure
+      - --join=frankfurt,zurich,vienna,paris,amsterdam,dublin,stockholm
+      - --locality=region=eu-central,zone=zone-a
+    ports:
+      - "26257:26257"
+      - "8080:8080"
+    volumes:
+      - crdb-data-frankfurt:/cockroach/cockroach-data
+    networks:
+      - cockroachnet
+
+  zurich:
+    image: cockroachdb/cockroach:v24.3.6
+    container_name: zurich
+    command:
+      - start
+      - --insecure
+      - --join=frankfurt,zurich,vienna,paris,amsterdam,dublin,stockholm
+      - --locality=region=eu-central,zone=zone-b
+    ports:
+      - "26258:26257"
+      - "8081:8080"
+    volumes:
+      - crdb-data-zurich:/cockroach/cockroach-data
+    networks:
+      - cockroachnet
+
+  vienna:
+    image: cockroachdb/cockroach:v24.3.6
+    container_name: vienna
+    command:
+      - start
+      - --insecure
+      - --join=frankfurt,zurich,vienna,paris,amsterdam,dublin,stockholm
+      - --locality=region=eu-central,zone=zone-c
+    volumes:
+      - crdb-data-vienna:/cockroach/cockroach-data
+    networks:
+      - cockroachnet
+
+  paris:
+    image: cockroachdb/cockroach:v24.3.6
+    container_name: paris
+    command:
+      - start
+      - --insecure
+      - --join=frankfurt,zurich,vienna,paris,amsterdam,dublin,stockholm
+      - --locality=region=eu-west,zone=zone-a
+    volumes:
+      - crdb-data-paris:/cockroach/cockroach-data
+    networks:
+      - cockroachnet
+
+  amsterdam:
+    image: cockroachdb/cockroach:v24.3.6
+    container_name: amsterdam
+    command:
+      - start
+      - --insecure
+      - --join=frankfurt,zurich,vienna,paris,amsterdam,dublin,stockholm
+      - --locality=region=eu-west,zone=zone-b
+    volumes:
+      - crdb-data-amsterdam:/cockroach/cockroach-data
+    networks:
+      - cockroachnet
+
+  dublin:
+    image: cockroachdb/cockroach:v24.3.6
+    container_name: dublin
+    command:
+      - start
+      - --insecure
+      - --join=frankfurt,zurich,vienna,paris,amsterdam,dublin,stockholm
+      - --locality=region=eu-west,zone=zone-c
+    volumes:
+      - crdb-data-dublin:/cockroach/cockroach-data
+    networks:
+      - cockroachnet
+
+  stockholm:
+    image: cockroachdb/cockroach:v24.3.6
+    container_name: stockholm
+    command:
+      - start
+      - --insecure
+      - --join=frankfurt,zurich,vienna,paris,amsterdam,dublin,stockholm
+      - --locality=region=eu-north,zone=zone-a
+    volumes:
+      - crdb-data-stockholm:/cockroach/cockroach-data
+    networks:
+      - cockroachnet
+
+  init:
+    image: cockroachdb/cockroach:v24.3.6
+    depends_on:
+      - frankfurt
+    entrypoint:
+      - /bin/sh
+      - -c
+      - "sleep 10 && cockroach init --host=frankfurt --insecure"
+    networks:
+      - cockroachnet
+
+volumes:
+  crdb-data-frankfurt:
+  crdb-data-zurich:
+  crdb-data-vienna:
+  crdb-data-paris:
+  crdb-data-amsterdam:
+  crdb-data-dublin:
+  crdb-data-stockholm:
+
+networks:
+  cockroachnet:
+    driver: bridge
+
