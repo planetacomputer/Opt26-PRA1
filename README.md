@@ -17,7 +17,7 @@ També teniu a la vostra disposició un vídeo d'ús general de la màquina virt
 
   
 
-Des d’un terminal de la màquina virtual, clona el repositori GitHub de la PRA1 al directori **Documents** de l’usuari `student` (aquesta comanda s’executa en una mateixa línia, i hi ha un espai entre `…-PRA.git` i `/home/student/…`):
+Des d’un terminal de la màquina virtual, clona el repositori GitHub de la PRA1 al directori **Documents** de l’usuari `student`:
 
   
 
